@@ -27,17 +27,17 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017
     depends_on:
-      - mongoimport
-      # mongoimport:
-      #  condition: "service_completed_successfully"
+      #- mongoimport
+      mongoimport:
+       condition: "service_completed_successfully"
 
   myapp:
     build: .
     command: bash -c "python main.py"
     depends_on:
-      - mongoimport
-      # mongoimport:
-      #  condition: "service_completed_successfully"
+      #- mongoimport
+      mongoimport:
+       condition: "service_completed_successfully"
     env_file:
       - .env
 
