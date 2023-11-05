@@ -30,11 +30,10 @@ def _get_data(start_date: dt, end_date: dt, group_type: str):
                 start_date + timedelta(days=i)).strftime(format)
                 for i in range(int(interval/day) + 1)]
         case 'month':
-            days_per_month = 28
             format = '%Y-%m'
             extra = '-01T00:00:00'
             time_sequence = [(
-                start_date + timedelta(days=i*days_per_month)).strftime(format)
+                start_date + timedelta(days=i*28)).strftime(format)
                 for i in range(int(interval/month))]
     return _get_stage_group_by(format), time_sequence, extra
 

@@ -12,7 +12,7 @@ services:
   mongoimport:
     image: mongo
     volumes:
-      - ./data:/data/db/vol
+      - ../data:/data/db/vol
     command: mongorestore -u root -p example --authenticationDatabase admin -h mongo --port 27017 -d salaries /data/db/vol/sample_collection.bson
     depends_on:
       - mongo 
@@ -32,14 +32,16 @@ services:
        condition: "service_completed_successfully"
 
   myapp:
-    build: .
+    build: 
+      context: ..
+      dockerfile: ./docker/dev.Dockerfile
     command: bash -c "python main.py"
     depends_on:
       #- mongoimport
       mongoimport:
        condition: "service_completed_successfully"
     env_file:
-      - .env
+      - ../.env
 
 volumes:
   mongodb_vol:

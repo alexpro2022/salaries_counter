@@ -74,7 +74,7 @@ nano .env
 
 3. Из корневой директории проекта выполните команду:
 ```bash
-docker compose up -d --build
+docker compose -f docker/docker-compose.yml up -d --build
 ```
 Проект будет развернут в docker-контейнерах, (контейнеры бота и доступа к БД будут ожидать завершения загрузки статистических данных из коллекции). Далее:
   - Доступ к БД осуществляется по адресу: http://localhost:8081/
@@ -82,11 +82,11 @@ docker compose up -d --build
 
 4. Остановить docker и удалить контейнеры можно командой из корневой директории проекта:
 ```bash
-docker compose down
+docker compose -f docker/docker-compose.yml down
 ```
 Если также необходимо удалить тома базы данных, статики и медиа:
 ```bash
-docker compose down -v
+docker compose -f docker/docker-compose.yml down -v
 ```
 
 [⬆️Оглавление](#оглавление)
