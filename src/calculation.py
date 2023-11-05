@@ -13,8 +13,10 @@ def _get_stage_group_by(format: str) -> dict:
 
 def _get_data(start_date: dt, end_date: dt, group_type: str):
 
-    def get_date(t_d_args: dict):
-        return (start_date + timedelta(**t_d_args)).strftime(format)
+    def get_date(time_unit_plural: str, time_unit: int, coef: int = 1):
+        return [(
+            start_date + timedelta(**{time_unit_plural: i * coef})).strftime(format)
+            for i in range(int(interval/time_unit) + 1)]
 
     interval = (end_date - start_date).total_seconds()
     hour = 60 * 60
@@ -24,18 +26,15 @@ def _get_data(start_date: dt, end_date: dt, group_type: str):
         case 'hour':
             format = '%Y-%m-%dT%H'
             extra = ':00:00'
-            time_sequence = [get_date({'hours': i})
-                             for i in range(int(interval/hour) + 1)]
+            time_sequence = get_date('hours', hour)
         case 'day':
             format = '%Y-%m-%d'
             extra = 'T00:00:00'
-            time_sequence = [get_date({'days': i})
-                             for i in range(int(interval/day) + 1)]
+            time_sequence = get_date('days', day)
         case 'month':
             format = '%Y-%m'
             extra = '-01T00:00:00'
-            time_sequence = [get_date({'days': i * 28})
-                             for i in range(int(interval/month) + 1)]
+            time_sequence = get_date('days', month, 28)
     return (_get_stage_group_by(format),
             {time: 0 for time in time_sequence},
             extra)
