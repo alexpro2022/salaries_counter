@@ -35,7 +35,9 @@ def _get_data(start_date: dt, end_date: dt, group_type: str):
             time_sequence = [(
                 start_date + timedelta(days=i*28)).strftime(format)
                 for i in range(int(interval/month))]
-    return _get_stage_group_by(format), time_sequence, extra
+    return (_get_stage_group_by(format),
+            {time: 0 for time in time_sequence},
+            extra)
 
 
 async def calc(collection: AgnosticCollection, data: dict[str, str]):
@@ -45,11 +47,10 @@ async def calc(collection: AgnosticCollection, data: dict[str, str]):
     dataset, labels = [], []
 
     (stage_group_and_sum,
-     time_sequence,
+     initial_data,
      extra) = _get_data(dt_from, dt_upto, group_type)
     stage_match_dates = {'$match': {'dt': {'$gte': dt_from, '$lte': dt_upto}}}
     pipeline = [stage_match_dates, stage_group_and_sum]
-    initial_data = {time: 0 for time in time_sequence}
 
     async for item in collection.aggregate(pipeline):
         initial_data[item['_id']] = item['total']
