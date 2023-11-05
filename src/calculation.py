@@ -15,7 +15,8 @@ def _get_data(start_date: dt, end_date: dt, group_type: str):
 
     def get_date(time_unit_plural: str, time_unit: int, coef: int = 1):
         return [(
-            start_date + timedelta(**{time_unit_plural: i * coef})).strftime(format)
+            start_date + timedelta(
+                **{time_unit_plural: i * coef})).strftime(format)
             for i in range(int(interval/time_unit) + 1)]
 
     interval = (end_date - start_date).total_seconds()
